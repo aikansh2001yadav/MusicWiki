@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_top_title">20dp</dimen>
+    <dimen name="text_size_title">24sp</dimen>
+    <dimen name="margin_top_welcome">20dp</dimen>
+    <dimen name="text_size_welcome">22sp</dimen>
+    <dimen name="text_size_choose_genre">20sp</dimen>
+    <dimen name="margin_top_genres">20dp</dimen>
+    <dimen name="padding_start_text_genre">15dp</dimen>
+    <dimen name="padding_end_text_genre">15dp</dimen>
+    <dimen name="margin_start_genres">15dp</dimen>
+    <dimen name="margin_end_genres">15dp</dimen>
+</resources>

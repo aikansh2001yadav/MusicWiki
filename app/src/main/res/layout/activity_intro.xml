@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".ui.genre.GenreActivity">
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_title"
+                android:gravity="center"
+                android:text="@string/text_app_title"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_title"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_welcome"
+                android:gravity="center"
+                android:text="@string/text_welcome"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_welcome"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_title" />
+
+            <TextView
+                android:id="@+id/text_choose_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/text_choose_genre"
+                android:textSize="@dimen/text_size_choose_genre"
+                app:layout_constraintBottom_toBottomOf="@id/btn_drop_down"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/btn_drop_down"
+                app:layout_constraintTop_toTopOf="@id/btn_drop_down" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/btn_drop_down"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:foreground="@drawable/ic_background"
+                android:background="@drawable/ic_expand"
+                android:paddingTop="5dp"
+                app:civ_border_color="@color/grey"
+                app:civ_border_width="1dp"
+                app:layout_constraintLeft_toRightOf="@+id/text_choose_genre"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_welcome" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview_top_genres"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/margin_start_genres"
+                android:layout_marginTop="@dimen/margin_top_genres"
+                android:layout_marginEnd="@dimen/margin_end_genres"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_choose_genre" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

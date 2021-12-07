@@ -1,0 +1,83 @@
+package com.example.musicwiki.ui.genreInfo
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import com.example.musicwiki.R
+import com.example.musicwiki.data.repository.GenreRepository
+import com.example.musicwiki.databinding.ActivityGenreInfoBinding
+import com.example.musicwiki.network.MyApi
+import com.example.musicwiki.utils.toast
+import com.google.android.material.tabs.TabLayoutMediator
+
+class GenreInfoActivity : AppCompatActivity() {
+    private var genreName: String? = null
+    private lateinit var myApi : MyApi
+    private lateinit var genreRepository: GenreRepository
+    private lateinit var genreInfoViewModelFactory: GenreInfoViewModelFactory
+    private lateinit var genreInfoViewModel: GenreInfoViewModel
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private var genreInfoBinding: ActivityGenreInfoBinding? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        genreInfoBinding = DataBindingUtil.setContentView(this, R.layout.activity_genre_info)
+
+        setupActionBarWithBack()
+
+        myApi = MyApi()
+        genreRepository = GenreRepository(myApi)
+        genreInfoViewModelFactory = GenreInfoViewModelFactory(genreRepository)
+        genreInfoViewModel = ViewModelProvider(this, genreInfoViewModelFactory)[GenreInfoViewModel::class.java]
+
+        genreName = intent.getStringExtra("GENRE_NAME")
+        genreName = genreName?.uppercase()
+        if(genreName != null){
+            genreInfoViewModel.getGenreInfo(genreName!!)
+        }
+
+        setupViewPager()
+
+        genreInfoViewModel.getGenreInfoLiveData().observe(this){
+            val index = it.wiki.summary.indexOf("<a")
+            val summary = it.wiki.summary.substring(0, index)
+            genreInfoBinding!!.textGenreTitle.text = it.name
+            genreInfoBinding!!.textGenreSummary.text = summary
+        }
+
+        genreInfoViewModel.getMessageLiveData().observe(this){
+            toast(it)
+        }
+    }
+
+    private fun setupViewPager() {
+        viewPagerAdapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+        genreInfoBinding!!.viewpager.adapter = viewPagerAdapter
+
+        TabLayoutMediator(
+            genreInfoBinding!!.tabLayout,
+            genreInfoBinding!!.viewpager,
+            true
+        ) { tab, position ->
+            when (position) {
+                0 -> tab.text = "ALBUMS"
+                1 -> tab.text = "ARTISTS"
+                2 -> tab.text = "TRACKS"
+            }
+        }.attach()
+    }
+
+    private fun setupActionBarWithBack() {
+        setSupportActionBar(genreInfoBinding!!.toolbarGenreInfo)
+        supportActionBar!!.setDisplayShowTitleEnabled(false)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_back)
+
+        genreInfoBinding!!.toolbarGenreInfo.setNavigationOnClickListener { onBackPressed() }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        genreInfoBinding = null
+    }
+}
