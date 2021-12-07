@@ -13,7 +13,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle : Lifecycle, 
 
     override fun createFragment(position: Int) = when(position){
         0 -> AlbumFragment.newInstance(genreName)
-        1 -> ArtistFragment()
+        1 -> ArtistFragment.newInstance(genreName)
         2 -> TrackFragment()
         else -> AlbumFragment()
     }

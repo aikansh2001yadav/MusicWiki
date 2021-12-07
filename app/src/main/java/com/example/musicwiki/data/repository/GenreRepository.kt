@@ -2,7 +2,9 @@ package com.example.musicwiki.data.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.example.musicwiki.data.model.albums.Album
+import com.example.musicwiki.data.model.artists.Artist
 import com.example.musicwiki.data.model.genreInfo.Tag
+import com.example.musicwiki.data.model.tracks.Track
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.SafeApiRequest
 import com.example.musicwiki.utils.CoroutineExtensions
@@ -12,6 +14,8 @@ class GenreRepository(private val myApi: MyApi) : SafeApiRequest() {
     private val messageLiveData = MutableLiveData<String>()
     private val genreInfoLiveData = MutableLiveData<Tag>()
     private val albumListLiveData = MutableLiveData<List<Album>>()
+    private val artistListLiveData = MutableLiveData<List<Artist>>()
+    private val trackListLiveData = MutableLiveData<List<Track>>()
 
     fun getGenreInfo(genreName: String) {
         try {
@@ -25,11 +29,22 @@ class GenreRepository(private val myApi: MyApi) : SafeApiRequest() {
     }
 
     fun getAlbums(genreName: String) {
-        CoroutineExtensions.ioThenMain({apiRequest { myApi.getAlbumList(genreName) }}, {
+        CoroutineExtensions.ioThenMain({ apiRequest { myApi.getAlbumList(genreName) } }, {
             albumListLiveData.value = it.albums.album
         })
     }
 
+    fun getArtists(genreName: String) {
+        CoroutineExtensions.ioThenMain({ apiRequest { myApi.getArtistList(genreName) } }, {
+            artistListLiveData.value = it.topartists.artist
+        })
+    }
+
+    fun getTracks(genreName: String){
+        CoroutineExtensions.ioThenMain({apiRequest { myApi.getTrackList(genreName) }}, {
+            trackListLiveData.value = it.track
+        })
+    }
     fun getGenreInfoLiveData(): MutableLiveData<Tag> {
         return genreInfoLiveData
     }
@@ -38,7 +53,15 @@ class GenreRepository(private val myApi: MyApi) : SafeApiRequest() {
         return messageLiveData
     }
 
-    fun getAlbumsListLiveData() : MutableLiveData<List<Album>>{
+    fun getAlbumsListLiveData(): MutableLiveData<List<Album>> {
         return albumListLiveData
+    }
+
+    fun getArtistListLiveData(): MutableLiveData<List<Artist>> {
+        return artistListLiveData
+    }
+
+    fun getTrackListLiveData() : MutableLiveData<List<Track>>{
+        return trackListLiveData
     }
 }
