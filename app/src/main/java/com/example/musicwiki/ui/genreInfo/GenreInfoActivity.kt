@@ -28,30 +28,33 @@ class GenreInfoActivity : AppCompatActivity() {
         myApi = MyApi()
         genreRepository = GenreRepository(myApi)
         genreInfoViewModelFactory = GenreInfoViewModelFactory(genreRepository)
-        genreInfoViewModel = ViewModelProvider(this, genreInfoViewModelFactory)[GenreInfoViewModel::class.java]
+        genreInfoViewModel =
+            ViewModelProvider(this, genreInfoViewModelFactory)[GenreInfoViewModel::class.java]
 
         genreName = intent.getStringExtra("GENRE_NAME")
         genreName = genreName?.uppercase()
-        if(genreName != null){
+        if (genreName != null) {
             genreInfoViewModel.getGenreInfo(genreName!!)
         }
 
-        setupViewPager()
+        if (genreName != null) {
+            setupViewPager()
+        }
 
-        genreInfoViewModel.getGenreInfoLiveData().observe(this){
+        genreInfoViewModel.getGenreInfoLiveData().observe(this) {
             val index = it.wiki.summary.indexOf("<a")
             val summary = it.wiki.summary.substring(0, index)
             genreInfoBinding!!.textGenreTitle.text = it.name
             genreInfoBinding!!.textGenreSummary.text = summary
         }
 
-        genreInfoViewModel.getMessageLiveData().observe(this){
+        genreInfoViewModel.getMessageLiveData().observe(this) {
             toast(it)
         }
     }
 
     private fun setupViewPager() {
-        viewPagerAdapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+        viewPagerAdapter = ViewPagerAdapter(supportFragmentManager, lifecycle, genreName!!)
         genreInfoBinding!!.viewpager.adapter = viewPagerAdapter
 
         TabLayoutMediator(
