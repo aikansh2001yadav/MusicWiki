@@ -17,7 +17,7 @@ class GenreInfoActivity : AppCompatActivity() {
     private lateinit var genreRepository: GenreRepository
     private lateinit var genreInfoViewModelFactory: GenreInfoViewModelFactory
     private lateinit var genreInfoViewModel: GenreInfoViewModel
-    private lateinit var viewPagerAdapter: ViewPagerAdapter
+    private var viewPagerAdapter: ViewPagerAdapter? = null
     private var genreInfoBinding: ActivityGenreInfoBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,5 +82,6 @@ class GenreInfoActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         genreInfoBinding = null
+        viewPagerAdapter = null
     }
 }

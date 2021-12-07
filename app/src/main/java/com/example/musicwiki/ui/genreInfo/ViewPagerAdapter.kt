@@ -5,7 +5,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.musicwiki.ui.genreInfo.album.AlbumFragment
 import com.example.musicwiki.ui.genreInfo.artist.ArtistFragment
-import com.example.musicwiki.ui.genreInfo.track.TrackFragment
+import com.example.musicwiki.ui.genreInfo.track.TracksFragment
 
 class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle : Lifecycle, private val genreName:String) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
@@ -14,7 +14,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle : Lifecycle, 
     override fun createFragment(position: Int) = when(position){
         0 -> AlbumFragment.newInstance(genreName)
         1 -> ArtistFragment.newInstance(genreName)
-        2 -> TrackFragment()
-        else -> AlbumFragment()
+        2 -> TracksFragment.newInstance(genreName)
+        else -> AlbumFragment.newInstance(genreName)
     }
 }

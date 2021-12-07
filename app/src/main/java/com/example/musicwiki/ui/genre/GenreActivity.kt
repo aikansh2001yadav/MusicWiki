@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
 import com.example.musicwiki.data.model.genreItems.Tag
 import com.example.musicwiki.data.repository.GenreItemsRepository
-import com.example.musicwiki.databinding.ActivityIntroBinding
+import com.example.musicwiki.databinding.ActivityGenreBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.utils.CoroutineExtensions.io
 import com.example.musicwiki.utils.CoroutineExtensions.main
@@ -21,13 +21,13 @@ class GenreActivity : AppCompatActivity() {
     private lateinit var genreViewModelFactory: GenreViewModelFactory
     private lateinit var genreItemsRepository: GenreItemsRepository
     private lateinit var genreViewModel: GenreViewModel
-    private var introBinding: ActivityIntroBinding? = null
+    private var introBinding: ActivityGenreBinding? = null
     private lateinit var totalGenresList: ArrayList<Tag>
     private lateinit var topGenresList: ArrayList<Tag>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        introBinding = DataBindingUtil.setContentView(this, R.layout.activity_intro)
+        introBinding = DataBindingUtil.setContentView(this, R.layout.activity_genre)
 
         myApi = MyApi()
         genreItemsRepository = GenreItemsRepository(myApi)

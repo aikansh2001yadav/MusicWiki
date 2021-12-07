@@ -1,5 +1,5 @@
 package com.example.musicwiki.data.model.tracks
 
-data class AttrX(
-    val rank: String
+data class TracksX(
+    val track: List<Track>
 )

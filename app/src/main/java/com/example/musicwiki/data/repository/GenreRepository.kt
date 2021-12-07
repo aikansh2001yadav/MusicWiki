@@ -42,7 +42,7 @@ class GenreRepository(private val myApi: MyApi) : SafeApiRequest() {
 
     fun getTracks(genreName: String){
         CoroutineExtensions.ioThenMain({apiRequest { myApi.getTrackList(genreName) }}, {
-            trackListLiveData.value = it.track
+            trackListLiveData.value = it.tracks.track
         })
     }
     fun getGenreInfoLiveData(): MutableLiveData<Tag> {

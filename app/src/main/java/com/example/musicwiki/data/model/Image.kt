@@ -1,11 +1,11 @@
-package com.example.musicwiki.data.model.tracks
+package com.example.musicwiki.data.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Streamable(
+data class Image(
     @SerializedName("#text")
     @Expose
     val text: String,
-    val fulltrack: String
+    val size: String
 )

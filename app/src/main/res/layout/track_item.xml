@@ -3,21 +3,22 @@
 
     <data>
 
+        <import type="com.example.musicwiki.utils.UtilFunctionsKt"/>
+
         <variable
-            name="artist"
-            type="com.example.musicwiki.data.model.artists.Artist" />
+            name="track"
+            type="com.example.musicwiki.data.model.tracks.Track" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <ImageView
             android:layout_width="@dimen/width_image"
             android:layout_height="@dimen/height_image"
-            app:image="@{artist.image[2].text}"
-            android:scaleType="fitXY" />
-
+            app:image="@{track.image[2].text}"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,11 +30,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="@{artist.name}"
+                android:text="@{track.name}"
                 android:textColor="@color/secondary_color"
-                android:textSize="@dimen/text_size_album_title"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_album_title" />
 
+            <TextView
+                android:id="@+id/text_album_artist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/secondary_color"
+                android:text="@{track.artist.name}"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_album_artist" />
+        </LinearLayout>
     </FrameLayout>
 </layout>

@@ -13,10 +13,10 @@
             android:layout_height="wrap_content"
             android:paddingStart="@dimen/padding_start_text_genre"
             android:paddingEnd="@dimen/padding_end_text_genre"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:paddingTop="@dimen/padding_top_text_genre"
+            android:paddingBottom="@dimen/padding_bottom_text_genre"
             android:text=""
-            android:textColor="@android:color/black"
-            android:textSize="15sp" />
+            android:textColor="@color/genre_text_color"
+            android:textSize="@dimen/text_size_genre" />
     </LinearLayout>
 </layout>

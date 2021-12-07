@@ -1,15 +1,8 @@
 package com.example.musicwiki.data.model.artists
 
-import com.google.gson.annotations.Expose
-import com.google.gson.annotations.SerializedName
+import com.example.musicwiki.data.model.Image
 
 data class Artist(
-    @SerializedName("@attr")
-    @Expose
-    val attr: AttrX,
     val image: List<Image>,
-    val mbid: String,
-    val name: String,
-    val streamable: String,
-    val url: String
+    val name: String
 )
