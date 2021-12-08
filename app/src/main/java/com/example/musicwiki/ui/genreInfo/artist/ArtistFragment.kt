@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
 import com.example.musicwiki.data.model.artists.Artist
 import com.example.musicwiki.data.repository.GenreRepository
+import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.ArtistFragmentBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.utils.toast
@@ -26,6 +27,7 @@ class ArtistFragment : Fragment() {
     }
 
     private lateinit var myApi: MyApi
+    private lateinit var appDatabase: AppDatabase
     private lateinit var genreRepository: GenreRepository
     private lateinit var artistViewModelFactory: ArtistViewModelFactory
 
@@ -46,7 +48,8 @@ class ArtistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         myApi = MyApi()
-        genreRepository = GenreRepository(myApi)
+        appDatabase = AppDatabase.getInstance(requireContext())!!
+        genreRepository = GenreRepository(myApi, appDatabase)
         artistViewModelFactory = ArtistViewModelFactory(genreRepository)
         viewModel = ViewModelProvider(this, artistViewModelFactory)[(ArtistViewModel::class.java)]
 

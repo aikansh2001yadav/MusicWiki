@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.musicwiki.R
 import com.example.musicwiki.data.repository.GenreRepository
+import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.ActivityGenreInfoBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.utils.toast
@@ -14,6 +15,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 class GenreInfoActivity : AppCompatActivity() {
     private var genreName: String? = null
     private lateinit var myApi : MyApi
+    private lateinit var appDatabase: AppDatabase
     private lateinit var genreRepository: GenreRepository
     private lateinit var genreInfoViewModelFactory: GenreInfoViewModelFactory
     private lateinit var genreInfoViewModel: GenreInfoViewModel
@@ -26,7 +28,8 @@ class GenreInfoActivity : AppCompatActivity() {
         setupActionBarWithBack()
 
         myApi = MyApi()
-        genreRepository = GenreRepository(myApi)
+        appDatabase = AppDatabase.getInstance(this)!!
+        genreRepository = GenreRepository(myApi, appDatabase)
         genreInfoViewModelFactory = GenreInfoViewModelFactory(genreRepository)
         genreInfoViewModel =
             ViewModelProvider(this, genreInfoViewModelFactory)[GenreInfoViewModel::class.java]

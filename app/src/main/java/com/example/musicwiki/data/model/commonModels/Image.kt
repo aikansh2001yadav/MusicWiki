@@ -1,4 +1,4 @@
-package com.example.musicwiki.data.model
+package com.example.musicwiki.data.model.commonModels
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
