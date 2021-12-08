@@ -14,6 +14,7 @@ import com.example.musicwiki.data.repository.GenreRepository
 import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.TrackFragmentBinding
 import com.example.musicwiki.network.MyApi
+import com.example.musicwiki.network.NetworkConnectionInterceptor
 import com.example.musicwiki.utils.toast
 
 class TracksFragment : Fragment() {
@@ -29,6 +30,7 @@ class TracksFragment : Fragment() {
     private lateinit var myApi: MyApi
     private lateinit var appDatabase: AppDatabase
     private lateinit var genreRepository: GenreRepository
+    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
     private lateinit var trackViewModelFactory: TrackViewModelFactory
     private lateinit var viewModel: TrackViewModel
 
@@ -47,7 +49,8 @@ class TracksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        myApi = MyApi()
+        networkConnectionInterceptor = NetworkConnectionInterceptor(requireContext())
+        myApi = MyApi(networkConnectionInterceptor)
         appDatabase = AppDatabase.getInstance(requireContext())!!
         genreRepository = GenreRepository(myApi, appDatabase)
         trackViewModelFactory = TrackViewModelFactory(genreRepository)

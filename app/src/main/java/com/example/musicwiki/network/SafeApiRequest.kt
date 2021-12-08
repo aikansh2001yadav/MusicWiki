@@ -9,7 +9,7 @@ abstract class SafeApiRequest {
         if (response.isSuccessful) {
             return response.body()!!
         } else {
-            throw UtilExceptions.NetworkException(response.message())
+            throw UtilExceptions.ApiException(response.message())
         }
     }
 }

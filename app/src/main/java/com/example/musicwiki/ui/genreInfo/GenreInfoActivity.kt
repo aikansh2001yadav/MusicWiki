@@ -9,6 +9,7 @@ import com.example.musicwiki.data.repository.GenreRepository
 import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.ActivityGenreInfoBinding
 import com.example.musicwiki.network.MyApi
+import com.example.musicwiki.network.NetworkConnectionInterceptor
 import com.example.musicwiki.utils.toast
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -17,6 +18,7 @@ class GenreInfoActivity : AppCompatActivity() {
     private lateinit var myApi : MyApi
     private lateinit var appDatabase: AppDatabase
     private lateinit var genreRepository: GenreRepository
+    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
     private lateinit var genreInfoViewModelFactory: GenreInfoViewModelFactory
     private lateinit var genreInfoViewModel: GenreInfoViewModel
     private var viewPagerAdapter: ViewPagerAdapter? = null
@@ -27,7 +29,8 @@ class GenreInfoActivity : AppCompatActivity() {
 
         setupActionBarWithBack()
 
-        myApi = MyApi()
+        networkConnectionInterceptor = NetworkConnectionInterceptor(this)
+        myApi = MyApi(networkConnectionInterceptor)
         appDatabase = AppDatabase.getInstance(this)!!
         genreRepository = GenreRepository(myApi, appDatabase)
         genreInfoViewModelFactory = GenreInfoViewModelFactory(genreRepository)
@@ -45,10 +48,12 @@ class GenreInfoActivity : AppCompatActivity() {
         }
 
         genreInfoViewModel.getGenreInfoLiveData().observe(this) {
-            val index = it.wiki.summary.indexOf("<a")
-            val summary = it.wiki.summary.substring(0, index)
-            genreInfoBinding!!.textGenreTitle.text = it.name
-            genreInfoBinding!!.textGenreSummary.text = summary
+            if (it != null) {
+                val index = it.wiki.summary.indexOf("<a")
+                val summary = it.wiki.summary.substring(0, index)
+                genreInfoBinding!!.textGenreTitle.text = it.name
+                genreInfoBinding!!.textGenreSummary.text = summary
+            }
         }
 
         genreInfoViewModel.getMessageLiveData().observe(this) {

@@ -14,7 +14,7 @@ object CoroutineExtensions {
         work.invoke()
     }
 
-    fun <T : Any> ioThenMain(work: suspend (() -> T), callback: (T) -> Unit) {
+    fun <T : Any> ioThenMain(work: suspend (() -> T?), callback: (T?) -> Unit) {
         CoroutineScope(Dispatchers.Main).launch {
             val tagList = CoroutineScope(Dispatchers.IO).async io@{
                 return@io work.invoke()

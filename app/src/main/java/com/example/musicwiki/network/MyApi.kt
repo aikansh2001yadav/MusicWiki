@@ -5,6 +5,7 @@ import com.example.musicwiki.data.model.artists.TopArtists
 import com.example.musicwiki.data.model.genreInfo.GenreInfo
 import com.example.musicwiki.data.model.genreItems.GenreItems
 import com.example.musicwiki.data.model.tracks.Tracks
+import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -29,9 +30,10 @@ interface MyApi {
     suspend fun getTrackList(@Query("tag")tag:String) : Response<Tracks>
 
     companion object {
-        operator fun invoke(): MyApi {
+        operator fun invoke(networkConnectionInterceptor : NetworkConnectionInterceptor): MyApi {
+            val okHttpClient = OkHttpClient.Builder().addInterceptor(networkConnectionInterceptor).build()
             return Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://ws.audioscrobbler.com").build().create(MyApi::class.java)
+                .baseUrl("https://ws.audioscrobbler.com").client(okHttpClient).build().create(MyApi::class.java)
         }
     }
 }

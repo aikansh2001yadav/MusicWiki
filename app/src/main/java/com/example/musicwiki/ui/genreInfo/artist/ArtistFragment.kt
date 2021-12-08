@@ -14,6 +14,7 @@ import com.example.musicwiki.data.repository.GenreRepository
 import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.ArtistFragmentBinding
 import com.example.musicwiki.network.MyApi
+import com.example.musicwiki.network.NetworkConnectionInterceptor
 import com.example.musicwiki.utils.toast
 
 class ArtistFragment : Fragment() {
@@ -29,6 +30,7 @@ class ArtistFragment : Fragment() {
     private lateinit var myApi: MyApi
     private lateinit var appDatabase: AppDatabase
     private lateinit var genreRepository: GenreRepository
+    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
     private lateinit var artistViewModelFactory: ArtistViewModelFactory
 
     private var artistFragmentBinding: ArtistFragmentBinding? = null
@@ -47,7 +49,8 @@ class ArtistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        myApi = MyApi()
+        networkConnectionInterceptor = NetworkConnectionInterceptor(requireContext())
+        myApi = MyApi(networkConnectionInterceptor)
         appDatabase = AppDatabase.getInstance(requireContext())!!
         genreRepository = GenreRepository(myApi, appDatabase)
         artistViewModelFactory = ArtistViewModelFactory(genreRepository)
@@ -59,9 +62,11 @@ class ArtistFragment : Fragment() {
         }
 
         viewModel!!.getArtistListLiveData().observe(viewLifecycleOwner) { artistList ->
-            artistFragmentBinding!!.recyclerviewArtists.also {
-                it.layoutManager = GridLayoutManager(context, 2)
-                it.adapter = ArtistsAdapter(artistList as ArrayList<Artist>)
+            if (artistList != null) {
+                artistFragmentBinding!!.recyclerviewArtists.also {
+                    it.layoutManager = GridLayoutManager(context, 2)
+                    it.adapter = ArtistsAdapter(artistList as ArrayList<Artist>)
+                }
             }
         }
 

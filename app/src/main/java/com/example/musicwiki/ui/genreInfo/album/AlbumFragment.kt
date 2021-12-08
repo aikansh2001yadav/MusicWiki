@@ -14,6 +14,7 @@ import com.example.musicwiki.data.repository.GenreRepository
 import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.AlbumFragmentBinding
 import com.example.musicwiki.network.MyApi
+import com.example.musicwiki.network.NetworkConnectionInterceptor
 import com.example.musicwiki.utils.toast
 
 class AlbumFragment : Fragment() {
@@ -21,6 +22,7 @@ class AlbumFragment : Fragment() {
     private lateinit var appDatabase : AppDatabase
     private lateinit var myApi: MyApi
     private lateinit var genreRepository: GenreRepository
+    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
     private lateinit var albumViewModelFactory: AlbumViewModelFactory
     private lateinit var viewModel: AlbumViewModel
 
@@ -44,7 +46,8 @@ class AlbumFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        myApi = MyApi()
+        networkConnectionInterceptor = NetworkConnectionInterceptor(requireContext())
+        myApi = MyApi(networkConnectionInterceptor)
         appDatabase = AppDatabase.getInstance(requireContext())!!
         genreRepository = GenreRepository(myApi, appDatabase)
         albumViewModelFactory = AlbumViewModelFactory(genreRepository)
@@ -57,9 +60,11 @@ class AlbumFragment : Fragment() {
         }
 
         viewModel.getAlbumListLiveData().observe(viewLifecycleOwner) { albumList ->
-            albumFragmentBinding!!.recyclerviewAlbums.also {
-                it.layoutManager = GridLayoutManager(context, 2)
-                it.adapter = AlbumsAdapter(albumList as ArrayList<Album>)
+            if (albumList != null) {
+                albumFragmentBinding!!.recyclerviewAlbums.also {
+                    it.layoutManager = GridLayoutManager(context, 2)
+                    it.adapter = AlbumsAdapter(albumList as ArrayList<Album>)
+                }
             }
         }
 

@@ -10,6 +10,7 @@ import com.example.musicwiki.data.model.genreItems.Tag
 import com.example.musicwiki.data.repository.GenreItemsRepository
 import com.example.musicwiki.databinding.ActivityGenreBinding
 import com.example.musicwiki.network.MyApi
+import com.example.musicwiki.network.NetworkConnectionInterceptor
 import com.example.musicwiki.utils.CoroutineExtensions.io
 import com.example.musicwiki.utils.CoroutineExtensions.main
 import com.example.musicwiki.utils.toast
@@ -20,22 +21,23 @@ class GenreActivity : AppCompatActivity() {
     private lateinit var myApi: MyApi
     private lateinit var genreViewModelFactory: GenreViewModelFactory
     private lateinit var genreItemsRepository: GenreItemsRepository
+    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
     private lateinit var genreViewModel: GenreViewModel
     private var introBinding: ActivityGenreBinding? = null
-    private lateinit var totalGenresList: ArrayList<Tag>
-    private lateinit var topGenresList: ArrayList<Tag>
+    private var totalGenresList = ArrayList<Tag>()
+    private var topGenresList = ArrayList<Tag>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         introBinding = DataBindingUtil.setContentView(this, R.layout.activity_genre)
 
-        myApi = MyApi()
+        networkConnectionInterceptor = NetworkConnectionInterceptor(this)
+        myApi = MyApi(networkConnectionInterceptor)
         genreItemsRepository = GenreItemsRepository(myApi)
         genreViewModelFactory = GenreViewModelFactory(genreItemsRepository)
         genreViewModel = ViewModelProvider(this, genreViewModelFactory)[GenreViewModel::class.java]
 
-        topGenresList = ArrayList()
-        genreViewModel.getGenre()
+
         genreViewModel.getGenreLiveData().observe(this) {
             if (it != null) {
                 totalGenresList = it as ArrayList<Tag>
@@ -78,10 +80,22 @@ class GenreActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        genreViewModel.getGenre()
+        introBinding!!.btnDropDown.setBackgroundResource(R.drawable.ic_expand)
+        expanded = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        topGenresList.clear()
+        totalGenresList.clear()
+        introBinding!!.recyclerviewTopGenres.adapter = null
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         introBinding = null
-        topGenresList.clear()
-        totalGenresList.clear()
     }
 }
