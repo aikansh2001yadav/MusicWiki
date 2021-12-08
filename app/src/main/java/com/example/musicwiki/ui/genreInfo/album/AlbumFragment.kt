@@ -17,6 +17,7 @@ import com.example.musicwiki.utils.toast
 
 class AlbumFragment : Fragment() {
 
+//    private lateinit var appDatabase : AppDatabase
     private lateinit var myApi: MyApi
     private lateinit var genreRepository: GenreRepository
     private lateinit var albumViewModelFactory: AlbumViewModelFactory
@@ -43,6 +44,7 @@ class AlbumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         myApi = MyApi()
+//        appDatabase = AppDatabase.getInstance(requireContext())!!
         genreRepository = GenreRepository(myApi)
         albumViewModelFactory = AlbumViewModelFactory(genreRepository)
 
@@ -68,6 +70,6 @@ class AlbumFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         albumFragmentBinding = null
+//        AppDatabase.destroyInstance()
     }
-
 }
