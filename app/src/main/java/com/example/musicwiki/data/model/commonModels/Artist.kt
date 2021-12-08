@@ -1,4 +1,4 @@
-package com.example.musicwiki.data.model.tracks
+package com.example.musicwiki.data.model.commonModels
 
 data class Artist(
     val name: String,

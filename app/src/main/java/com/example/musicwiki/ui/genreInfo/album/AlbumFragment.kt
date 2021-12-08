@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
 import com.example.musicwiki.data.model.albums.Album
 import com.example.musicwiki.data.repository.GenreRepository
+import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.AlbumFragmentBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.utils.toast
 
 class AlbumFragment : Fragment() {
 
-//    private lateinit var appDatabase : AppDatabase
+    private lateinit var appDatabase : AppDatabase
     private lateinit var myApi: MyApi
     private lateinit var genreRepository: GenreRepository
     private lateinit var albumViewModelFactory: AlbumViewModelFactory
@@ -44,8 +45,8 @@ class AlbumFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         myApi = MyApi()
-//        appDatabase = AppDatabase.getInstance(requireContext())!!
-        genreRepository = GenreRepository(myApi)
+        appDatabase = AppDatabase.getInstance(requireContext())!!
+        genreRepository = GenreRepository(myApi, appDatabase)
         albumViewModelFactory = AlbumViewModelFactory(genreRepository)
 
         viewModel = ViewModelProvider(this, albumViewModelFactory)[AlbumViewModel::class.java]
