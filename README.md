@@ -2,9 +2,39 @@
 
 ## Description
 
-MusicWiki is an unofficial Last.fm app that contains information about different music genres, the albums, artists and tracks listed under the genre.
+MusicWiki is an unofficial Last.fm app that contains information about different music genres, the albums, artists and tracks listed under the genre with offline capabilities.
 
 ## Application Screenshots
+
+* Genres Screen:
+   <p align="center">
+     <img src = "images/img_genre_items.png" width="200" height="400"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+     <img src = "images/img_genre_items_dark.png" width="200" height="400">
+   </p>
+* Genres Screen (Expanded):
+   <p align="center">
+     <img src = "images/img_genre_items_expanded.png" width="200" height="400"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+     <img src = "images/img_genre_items_expanded_dark.png" width="200" height="400">
+   </p>
+* Genre Detail Screen: It shows genre as a title, description of the genre. It also shows list of top albums, top tracks and top artists as different sections.
+
+  - **Albums Screen:** It shows top albums of a particular genre.
+  <p align="center">
+  <img src = "images/img_albums.png" width="200" height="400"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src = "images/img_albums_dark.png" width="200" height="400">
+  </p>
+  
+  - **Artists Screen:** It shows top artists of a particular genre.
+  <p align="center">
+  <img src = "images/img_artists.png" width="200" height="400"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src = "images/img_artists_dark.png" width="200" height="400">
+  </p>
+  
+  - **Tracks Screen:** It shows top tracks of a particular genre.
+  <p align="center">
+  <img src = "images/img_tracks.png" width="200" height="400"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src = "images/img_tracks_dark.png" width="200" height="400">
+  </p>
 
 ## Code Structure
 
@@ -51,6 +81,7 @@ Different layers of the project:
 - [Retrofit](https://square.github.io/retrofit/) - Retrofit is a type-safe HTTP client for Android and Java – developed by Square (Dagger, Okhttp).
 - [Glide](https://bumptech.github.io/glide/) - Glide is a fast and efficient image loading library for Android focused on smooth scrolling. Glide offers an easy to use API, a performant and extensible resource decoding pipeline and automatic resource pooling.
 - [Circle Image View](https://github.com/hdodenhof/CircleImageView) - A fast circular ImageView perfect for profile images. This is based on RoundedImageView from Vince Mi which itself is based on techniques recommended by Romain Guy.
+- [Last Fm Api](https://www.last.fm/api) - The Last.fm API allows anyone to build their own programs using Last.fm data.
 
 ## Built With
 
