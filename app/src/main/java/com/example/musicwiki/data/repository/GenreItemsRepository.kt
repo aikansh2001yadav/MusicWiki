@@ -3,7 +3,7 @@ package com.example.musicwiki.data.repository
 import androidx.lifecycle.MutableLiveData
 import com.example.musicwiki.data.model.genreItems.GenreItems
 import com.example.musicwiki.data.model.genreItems.TogGenreItems
-import com.example.musicwiki.data.room.AppDatabase
+import com.example.musicwiki.data.db.AppDatabase
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.SafeApiRequest
 import com.example.musicwiki.utils.CoroutineExtensions.main

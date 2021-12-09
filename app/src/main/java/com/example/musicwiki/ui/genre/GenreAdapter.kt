@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicwiki.R
-import com.example.musicwiki.data.room.entities.Genre
+import com.example.musicwiki.data.db.entities.Genre
 import com.example.musicwiki.databinding.GenreItemBinding
 import com.example.musicwiki.ui.genreInfo.GenreInfoActivity
 

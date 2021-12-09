@@ -1,4 +1,4 @@
-package com.example.musicwiki.data.room.entities
+package com.example.musicwiki.data.db.entities
 
 import androidx.room.Entity
 import androidx.room.Ignore

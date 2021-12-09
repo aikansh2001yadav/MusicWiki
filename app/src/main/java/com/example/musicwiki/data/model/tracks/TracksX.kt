@@ -1,6 +1,6 @@
 package com.example.musicwiki.data.model.tracks
 
-import com.example.musicwiki.data.room.entities.Track
+import com.example.musicwiki.data.db.entities.Track
 
 /**
  * Stores list of track

@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.musicwiki.R
 import com.example.musicwiki.data.repository.GenreRepository
-import com.example.musicwiki.data.room.AppDatabase
+import com.example.musicwiki.data.db.AppDatabase
 import com.example.musicwiki.databinding.ActivityGenreInfoBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.NetworkConnectionInterceptor

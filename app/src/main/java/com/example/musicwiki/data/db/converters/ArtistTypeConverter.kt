@@ -1,4 +1,4 @@
-package com.example.musicwiki.data.room.converters
+package com.example.musicwiki.data.db.converters
 
 import androidx.room.TypeConverter
 import com.example.musicwiki.data.model.common.Artist

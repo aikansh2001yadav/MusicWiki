@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
 import com.example.musicwiki.data.repository.GenreItemsRepository
-import com.example.musicwiki.data.room.AppDatabase
-import com.example.musicwiki.data.room.entities.Genre
+import com.example.musicwiki.data.db.AppDatabase
+import com.example.musicwiki.data.db.entities.Genre
 import com.example.musicwiki.databinding.ActivityGenreBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.NetworkConnectionInterceptor

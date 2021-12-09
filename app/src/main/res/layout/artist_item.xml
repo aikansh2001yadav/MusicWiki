@@ -5,7 +5,7 @@
 
         <variable
             name="artist"
-            type="com.example.musicwiki.data.room.entities.Artist" />
+            type="com.example.musicwiki.data.db.entities.Artist" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

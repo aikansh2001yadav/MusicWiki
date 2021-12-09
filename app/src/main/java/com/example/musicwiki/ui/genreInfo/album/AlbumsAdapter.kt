@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicwiki.R
-import com.example.musicwiki.data.room.entities.Album
+import com.example.musicwiki.data.db.entities.Album
 import com.example.musicwiki.databinding.AlbumItemBinding
 
 class AlbumsAdapter(private val albumList: ArrayList<Album>) :

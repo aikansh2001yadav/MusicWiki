@@ -1,6 +1,6 @@
 package com.example.musicwiki.data.model.genreItems
 
-import com.example.musicwiki.data.room.entities.Genre
+import com.example.musicwiki.data.db.entities.Genre
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 

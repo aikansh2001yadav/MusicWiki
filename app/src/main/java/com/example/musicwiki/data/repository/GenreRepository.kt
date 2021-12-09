@@ -8,10 +8,10 @@ import com.example.musicwiki.data.model.artists.TopartistsX
 import com.example.musicwiki.data.model.genreInfo.GenreInfo
 import com.example.musicwiki.data.model.tracks.Tracks
 import com.example.musicwiki.data.model.tracks.TracksX
-import com.example.musicwiki.data.room.AppDatabase
-import com.example.musicwiki.data.room.entities.Album
-import com.example.musicwiki.data.room.entities.Artist
-import com.example.musicwiki.data.room.entities.Track
+import com.example.musicwiki.data.db.AppDatabase
+import com.example.musicwiki.data.db.entities.Album
+import com.example.musicwiki.data.db.entities.Artist
+import com.example.musicwiki.data.db.entities.Track
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.SafeApiRequest
 import com.example.musicwiki.utils.CoroutineExtensions.io

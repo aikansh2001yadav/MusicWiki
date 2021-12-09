@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.musicwiki.data.repository.GenreItemsRepository
-import com.example.musicwiki.data.room.entities.Genre
+import com.example.musicwiki.data.db.entities.Genre
 import com.example.musicwiki.utils.CoroutineExtensions
 import com.example.musicwiki.utils.UtilExceptions
 

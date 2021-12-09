@@ -1,6 +1,6 @@
 package com.example.musicwiki.data.model.artists
 
-import com.example.musicwiki.data.room.entities.Artist
+import com.example.musicwiki.data.db.entities.Artist
 
 /**
  * Stores list of artists
