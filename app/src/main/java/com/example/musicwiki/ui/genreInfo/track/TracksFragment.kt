@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
-import com.example.musicwiki.data.model.tracks.Track
+import com.example.musicwiki.data.room.entities.Track
 import com.example.musicwiki.data.repository.GenreRepository
 import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.TrackFragmentBinding
@@ -19,13 +19,7 @@ import com.example.musicwiki.utils.toast
 
 class TracksFragment : Fragment() {
 
-    companion object {
-        fun newInstance(genreName: String) = TracksFragment().apply {
-            arguments = Bundle().apply {
-                putString("GENRE_NAME", genreName)
-            }
-        }
-    }
+    private var genreName: String? = ""
 
     private lateinit var myApi: MyApi
     private lateinit var appDatabase: AppDatabase
@@ -33,8 +27,15 @@ class TracksFragment : Fragment() {
     private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
     private lateinit var trackViewModelFactory: TrackViewModelFactory
     private lateinit var viewModel: TrackViewModel
-
     private var trackFragmentBinding: TrackFragmentBinding? = null
+
+    companion object {
+        fun newInstance(genreName: String) = TracksFragment().apply {
+            arguments = Bundle().apply {
+                putString("GENRE_NAME", genreName)
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,10 +57,7 @@ class TracksFragment : Fragment() {
         trackViewModelFactory = TrackViewModelFactory(genreRepository)
         viewModel = ViewModelProvider(this, trackViewModelFactory)[(TrackViewModel::class.java)]
 
-        val genreName = arguments?.getString("GENRE_NAME")
-        if (genreName != null) {
-            viewModel.getTracks(genreName)
-        }
+        genreName = arguments?.getString("GENRE_NAME")
 
         viewModel.getTrackListLiveData().observe(viewLifecycleOwner) { trackList ->
             if (trackList != null) {
@@ -73,5 +71,17 @@ class TracksFragment : Fragment() {
         viewModel.getMessageLiveData().observe(viewLifecycleOwner) {
             requireContext().toast(it)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (genreName != null) {
+            viewModel.getTracks(genreName!!)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        AppDatabase.destroyInstance()
     }
 }

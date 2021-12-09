@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicwiki.R
-import com.example.musicwiki.data.model.genreItems.Tag
+import com.example.musicwiki.data.room.entities.Genre
 import com.example.musicwiki.databinding.GenreItemBinding
 import com.example.musicwiki.ui.genreInfo.GenreInfoActivity
 
 class GenreAdapter(
     private val context:Context,
-    private val genreList: List<Tag>
+    private val genreList: List<Genre>
 ) : RecyclerView.Adapter<GenreAdapter.IntroViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IntroViewHolder {

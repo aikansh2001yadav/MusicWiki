@@ -1,10 +1,13 @@
 package com.example.musicwiki.data.room.converters
 
 import androidx.room.TypeConverter
-import com.example.musicwiki.data.model.commonModels.Image
+import com.example.musicwiki.data.model.common.Image
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+/**
+ * Type converter for Image model class
+ */
 class ImageTypeConverter {
     var gson = Gson()
 

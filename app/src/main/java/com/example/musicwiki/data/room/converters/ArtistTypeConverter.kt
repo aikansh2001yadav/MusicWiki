@@ -1,9 +1,12 @@
 package com.example.musicwiki.data.room.converters
 
 import androidx.room.TypeConverter
-import com.example.musicwiki.data.model.commonModels.Artist
+import com.example.musicwiki.data.model.common.Artist
 import org.json.JSONObject
 
+/**
+ * Type converter for Artist model class
+ */
 class ArtistTypeConverter {
 
     @TypeConverter

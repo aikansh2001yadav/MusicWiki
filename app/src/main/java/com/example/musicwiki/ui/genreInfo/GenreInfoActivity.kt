@@ -10,7 +10,6 @@ import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.ActivityGenreInfoBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.NetworkConnectionInterceptor
-import com.example.musicwiki.utils.toast
 import com.google.android.material.tabs.TabLayoutMediator
 
 class GenreInfoActivity : AppCompatActivity() {
@@ -39,9 +38,6 @@ class GenreInfoActivity : AppCompatActivity() {
 
         genreName = intent.getStringExtra("GENRE_NAME")
         genreName = genreName?.uppercase()
-        if (genreName != null) {
-            genreInfoViewModel.getGenreInfo(genreName!!)
-        }
 
         if (genreName != null) {
             setupViewPager()
@@ -54,10 +50,6 @@ class GenreInfoActivity : AppCompatActivity() {
                 genreInfoBinding!!.textGenreTitle.text = it.name
                 genreInfoBinding!!.textGenreSummary.text = summary
             }
-        }
-
-        genreInfoViewModel.getMessageLiveData().observe(this) {
-            toast(it)
         }
     }
 
@@ -87,6 +79,12 @@ class GenreInfoActivity : AppCompatActivity() {
         genreInfoBinding!!.toolbarGenreInfo.setNavigationOnClickListener { onBackPressed() }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (genreName != null) {
+            genreInfoViewModel.getGenreInfo(genreName!!)
+        }
+    }
     override fun onDestroy() {
         super.onDestroy()
         genreInfoBinding = null

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicwiki.R
-import com.example.musicwiki.data.model.artists.Artist
+import com.example.musicwiki.data.room.entities.Artist
 import com.example.musicwiki.databinding.ArtistItemBinding
 
 class ArtistsAdapter(private val artistList: ArrayList<Artist>) :

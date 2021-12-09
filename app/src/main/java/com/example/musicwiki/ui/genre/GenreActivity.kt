@@ -6,8 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
-import com.example.musicwiki.data.model.genreItems.Tag
 import com.example.musicwiki.data.repository.GenreItemsRepository
+import com.example.musicwiki.data.room.AppDatabase
+import com.example.musicwiki.data.room.entities.Genre
 import com.example.musicwiki.databinding.ActivityGenreBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.NetworkConnectionInterceptor
@@ -19,13 +20,14 @@ class GenreActivity : AppCompatActivity() {
 
     private var expanded = false
     private lateinit var myApi: MyApi
+    private lateinit var appDatabase: AppDatabase
     private lateinit var genreViewModelFactory: GenreViewModelFactory
     private lateinit var genreItemsRepository: GenreItemsRepository
     private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
     private lateinit var genreViewModel: GenreViewModel
     private var introBinding: ActivityGenreBinding? = null
-    private var totalGenresList = ArrayList<Tag>()
-    private var topGenresList = ArrayList<Tag>()
+    private var totalGenresList = ArrayList<Genre>()
+    private var topGenresList = ArrayList<Genre>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -33,14 +35,15 @@ class GenreActivity : AppCompatActivity() {
 
         networkConnectionInterceptor = NetworkConnectionInterceptor(this)
         myApi = MyApi(networkConnectionInterceptor)
-        genreItemsRepository = GenreItemsRepository(myApi)
+        appDatabase = AppDatabase.getInstance(this)!!
+        genreItemsRepository = GenreItemsRepository(myApi, appDatabase)
         genreViewModelFactory = GenreViewModelFactory(genreItemsRepository)
         genreViewModel = ViewModelProvider(this, genreViewModelFactory)[GenreViewModel::class.java]
 
 
         genreViewModel.getGenreLiveData().observe(this) {
             if (it != null) {
-                totalGenresList = it as ArrayList<Tag>
+                totalGenresList = it as ArrayList<Genre>
                 io {
                     if (it.isNotEmpty()) {
                         for (i in 0 until 10) {

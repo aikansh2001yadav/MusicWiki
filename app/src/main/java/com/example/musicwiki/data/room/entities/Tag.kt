@@ -1,9 +1,13 @@
-package com.example.musicwiki.data.model.genreInfo
+package com.example.musicwiki.data.room.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.musicwiki.data.model.genreInfo.Wiki
 
+/**
+ * Entity class that stores information about tag
+ */
 @Entity
 data class Tag(
     @PrimaryKey(autoGenerate = false)

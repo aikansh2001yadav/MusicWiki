@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
-import com.example.musicwiki.data.model.albums.Album
+import com.example.musicwiki.data.room.entities.Album
 import com.example.musicwiki.data.repository.GenreRepository
 import com.example.musicwiki.data.room.AppDatabase
 import com.example.musicwiki.databinding.AlbumFragmentBinding
@@ -19,6 +19,7 @@ import com.example.musicwiki.utils.toast
 
 class AlbumFragment : Fragment() {
 
+    private var genreName:String? = ""
     private lateinit var appDatabase : AppDatabase
     private lateinit var myApi: MyApi
     private lateinit var genreRepository: GenreRepository
@@ -54,10 +55,7 @@ class AlbumFragment : Fragment() {
 
         viewModel = ViewModelProvider(this, albumViewModelFactory)[AlbumViewModel::class.java]
 
-        val genreName = arguments?.getString("GENRE_NAME")
-        if (genreName != null) {
-            viewModel.getAlbumsList(genreName)
-        }
+        genreName = arguments?.getString("GENRE_NAME")
 
         viewModel.getAlbumListLiveData().observe(viewLifecycleOwner) { albumList ->
             if (albumList != null) {
@@ -73,9 +71,15 @@ class AlbumFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (genreName != null) {
+            viewModel.getAlbumsList(genreName!!)
+        }
+    }
     override fun onDestroy() {
         super.onDestroy()
         albumFragmentBinding = null
-//        AppDatabase.destroyInstance()
+        AppDatabase.destroyInstance()
     }
 }

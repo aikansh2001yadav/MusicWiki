@@ -1,13 +1,14 @@
 package com.example.musicwiki.data.model.genreItems
 
+import com.example.musicwiki.data.room.entities.Genre
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 /**
- * Stores model class for topGenreItems
+ * Stores list of genre
  */
-data class GenreItems(
-    @SerializedName("toptags")
+data class TogGenreItems(
+    @SerializedName("tag")
     @Expose
-    val togGenreItems: TogGenreItems?
+    val genre: List<Genre>
 )

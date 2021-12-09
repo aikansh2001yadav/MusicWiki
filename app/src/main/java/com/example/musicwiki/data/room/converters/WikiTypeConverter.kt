@@ -4,6 +4,9 @@ import androidx.room.TypeConverter
 import com.example.musicwiki.data.model.genreInfo.Wiki
 import org.json.JSONObject
 
+/**
+ * Type converter for Wiki model class
+ */
 class WikiTypeConverter {
 
     @TypeConverter

@@ -20,4 +20,5 @@
     <dimen name="text_size_genre">15sp</dimen>
     <dimen name="text_size_album_title">18sp</dimen>
     <dimen name="text_size_album_artist">16sp</dimen>
+    <dimen name="margin_bottom_genres">20dp</dimen>
 </resources>

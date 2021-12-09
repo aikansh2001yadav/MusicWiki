@@ -1,5 +1,6 @@
 package com.example.musicwiki.data.repository
 
+import androidx.lifecycle.MutableLiveData
 import com.example.musicwiki.data.model.albums.Albums
 import com.example.musicwiki.data.model.albums.AlbumsX
 import com.example.musicwiki.data.model.artists.TopArtists
@@ -8,132 +9,116 @@ import com.example.musicwiki.data.model.genreInfo.GenreInfo
 import com.example.musicwiki.data.model.tracks.Tracks
 import com.example.musicwiki.data.model.tracks.TracksX
 import com.example.musicwiki.data.room.AppDatabase
+import com.example.musicwiki.data.room.entities.Album
+import com.example.musicwiki.data.room.entities.Artist
+import com.example.musicwiki.data.room.entities.Track
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.SafeApiRequest
+import com.example.musicwiki.utils.CoroutineExtensions.io
+import com.example.musicwiki.utils.CoroutineExtensions.main
 import com.example.musicwiki.utils.UtilExceptions
 
 class GenreRepository(private val myApi: MyApi, private val appDatabase: AppDatabase) :
     SafeApiRequest() {
-//    private val messageLiveData = MutableLiveData<String>()
-//    private val genreInfoLiveData = MutableLiveData<Tag>()
-//    private val albumListLiveData = MutableLiveData<List<Album>>()
-//    private val artistListLiveData = MutableLiveData<List<Artist>>()
-//    private val trackListLiveData = MutableLiveData<List<Track>>()
+    /**
+     * Stores error message
+     */
+    private val messageLiveData = MutableLiveData<String>()
 
-//    fun getGenreInfo(genreName: String) {
-//        try {
-//            CoroutineExtensions.ioThenMain({ apiRequest { myApi.getGenreInfo(genreName) } }, {
-//                genreInfoLiveData.value = it.tag
-//                appDatabase.dao().insertTag(it.tag)
-//            })
-//        } catch (e: UtilExceptions.NoConnectivityException) {
-//            e.printStackTrace()
-//            messageLiveData.value = e.message
-//        }
-//    }
-
-    suspend fun getGenreInfo(genreName: String) : GenreInfo?{
-        return try{
-            apiRequest { myApi.getGenreInfo(genreName) }
-        }catch (e : UtilExceptions.NoConnectivityException){
+    /**
+     * Returns info of a particular genre and update room
+     */
+    suspend fun getGenreInfo(genreName: String): GenreInfo {
+        return try {
+            val genreInfo = apiRequest { myApi.getGenreInfo(genreName) }
+            appDatabase.dao().insertTag(genreInfo.tag!!)
+            genreInfo
+        } catch (e: UtilExceptions.NoConnectivityException) {
+            main { messageLiveData.value = e.message }
+            val tag = appDatabase.dao().getTag(genreName)
+            return GenreInfo(tag)
+        } catch (e: UtilExceptions.NoInternetException) {
+            main { messageLiveData.value = messageLiveData.value + "\n" + e.message }
             val tag = appDatabase.dao().getTag(genreName)
             return GenreInfo(tag)
         }
     }
-//    fun getAlbums(genreName: String) {
-//        try{
-//            CoroutineExtensions.ioThenMain({ apiRequest { myApi.getAlbumList(genreName) } }, {
-//                albumListLiveData.value = it.albums.album
-//                io {
-//                    for (album in it.albums.album) {
-//                        appDatabase.dao()
-//                            .insertAlbum(Album(genreName, album.artist, album.image, album.name))
-//                    }
-//                }
-//            })
-//        }catch(e : UtilExceptions.NoConnectivityException){
-//            e.printStackTrace()
-//            messageLiveData.value = e.message
-//        }
-//    }
 
-    suspend fun getAlbums(genreName: String) : Albums{
-        return try{
-            apiRequest { myApi.getAlbumList(genreName) }
-        }catch (e : UtilExceptions.NoConnectivityException){
+    /**
+     * Returns list of albums and update album items in room
+     */
+    suspend fun getAlbums(genreName: String): Albums {
+        return try {
+            val albums = apiRequest { myApi.getAlbumList(genreName) }
+            io {
+                for (album in albums.albums.album) {
+                    appDatabase.dao()
+                        .insertAlbum(Album(genreName, album.artist, album.image, album.name))
+                }
+            }
+            albums
+        } catch (e: UtilExceptions.NoConnectivityException) {
+            main { messageLiveData.value = e.message }
+            val albumList = appDatabase.dao().getAlbumList(genreName)
+            return Albums(AlbumsX(albumList))
+        } catch (e: UtilExceptions.NoInternetException) {
+            main { messageLiveData.value = messageLiveData.value + "\n" + e.message }
             val albumList = appDatabase.dao().getAlbumList(genreName)
             return Albums(AlbumsX(albumList))
         }
     }
 
-//    fun getArtists(genreName: String) {
-//        try{
-//            CoroutineExtensions.ioThenMain({ apiRequest { myApi.getArtistList(genreName) } }, {
-//                artistListLiveData.value = it.topartists.artist
-//                io {
-//                    for (artist in it.topartists.artist) {
-//                        appDatabase.dao().insertArtist(Artist(genreName, artist.image, artist.name))
-//                    }
-//                }
-//            })
-//        }catch(e : UtilExceptions.NoConnectivityException){
-//            e.printStackTrace()
-//            messageLiveData.value = e.message
-//        }
-//    }
-
-    suspend fun getArtists(genreName: String) : TopArtists{
-        return try{
-            apiRequest { myApi.getArtistList(genreName) }
-        }catch (e : UtilExceptions.NoConnectivityException){
+    /**
+     * Returns list of artists and update artist items in room
+     */
+    suspend fun getArtists(genreName: String): TopArtists {
+        return try {
+            val topArtists = apiRequest { myApi.getArtistList(genreName) }
+            io {
+                for (artist in topArtists.topartists.artist) {
+                    appDatabase.dao().insertArtist(Artist(genreName, artist.image, artist.name))
+                }
+            }
+            topArtists
+        } catch (e: UtilExceptions.NoConnectivityException) {
+            main { messageLiveData.value = e.message }
+            val artistList = appDatabase.dao().getArtistList(genreName)
+            return TopArtists(TopartistsX(artistList))
+        } catch (e: UtilExceptions.NoInternetException) {
+            main { messageLiveData.value = messageLiveData.value + "\n" + e.message }
             val artistList = appDatabase.dao().getArtistList(genreName)
             return TopArtists(TopartistsX(artistList))
         }
     }
 
-//    fun getTracks(genreName: String){
-//        try{
-//            CoroutineExtensions.ioThenMain({apiRequest { myApi.getTrackList(genreName) }}, {
-//                trackListLiveData.value = it.tracks.track
-//                io {
-//                    for (track in it.tracks.track) {
-//                        appDatabase.dao().insertTrack(Track(genreName, track.artist, track.image, track.name))
-//                    }
-//                }
-//            })
-//        }catch (e : UtilExceptions.NoConnectivityException){
-//            e.printStackTrace()
-//            messageLiveData.value = e.message
-//        }
-//    }
-
-    suspend fun getTracks(genreName: String) : Tracks{
-        return try{
-            apiRequest { myApi.getTrackList(genreName) }
-        }catch (e : UtilExceptions.NoConnectivityException){
+    /**
+     * Returns list of tracks and update track items in room
+     */
+    suspend fun getTracks(genreName: String): Tracks {
+        return try {
+            val tracks = apiRequest { myApi.getTrackList(genreName) }
+            io {
+                for (track in tracks.tracks.track) {
+                    appDatabase.dao()
+                        .insertTrack(Track(genreName, track.artist, track.image, track.name))
+                }
+            }
+            tracks
+        } catch (e: UtilExceptions.NoConnectivityException) {
+            main { messageLiveData.value = e.message }
+            val artistList = appDatabase.dao().getTrackList(genreName)
+            return Tracks(TracksX(artistList))
+        } catch (e: UtilExceptions.NoInternetException) {
+            main { messageLiveData.value = messageLiveData.value + "\n" + e.message }
             val artistList = appDatabase.dao().getTrackList(genreName)
             return Tracks(TracksX(artistList))
         }
     }
 
-
-//    fun getGenreInfoLiveData(): MutableLiveData<Tag> {
-//        return genreInfoLiveData
-//    }
-//
-//    fun getMessageLiveData(): MutableLiveData<String> {
-//        return messageLiveData
-//    }
-//
-//    fun getAlbumsListLiveData(): MutableLiveData<List<Album>> {
-//        return albumListLiveData
-//    }
-//
-//    fun getArtistListLiveData(): MutableLiveData<List<Artist>> {
-//        return artistListLiveData
-//    }
-//
-//    fun getTrackListLiveData() : MutableLiveData<List<Track>>{
-//        return trackListLiveData
-//    }
+    /**
+     * Returns reference of messageLiveData
+     */
+    fun getMessageLiveData(): MutableLiveData<String> {
+        return messageLiveData
+    }
 }

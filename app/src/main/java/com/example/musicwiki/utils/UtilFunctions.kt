@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.musicwiki.R
 
 fun Context.toast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
 @BindingAdapter("image")
