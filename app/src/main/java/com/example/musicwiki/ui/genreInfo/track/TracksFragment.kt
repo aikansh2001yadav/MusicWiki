@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
+import com.example.musicwiki.data.db.AppDatabase
 import com.example.musicwiki.data.db.entities.Track
 import com.example.musicwiki.data.repository.GenreRepository
-import com.example.musicwiki.data.db.AppDatabase
 import com.example.musicwiki.databinding.TrackFragmentBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.NetworkConnectionInterceptor
@@ -21,12 +21,12 @@ class TracksFragment : Fragment() {
 
     private var genreName: String? = ""
 
-    private lateinit var myApi: MyApi
-    private lateinit var appDatabase: AppDatabase
-    private lateinit var genreRepository: GenreRepository
-    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
-    private lateinit var trackViewModelFactory: TrackViewModelFactory
-    private lateinit var viewModel: TrackViewModel
+    private var myApi: MyApi? = null
+    private var appDatabase: AppDatabase? = null
+    private var genreRepository: GenreRepository? = null
+    private var networkConnectionInterceptor: NetworkConnectionInterceptor? = null
+    private var trackViewModelFactory: TrackViewModelFactory? = null
+    private var viewModel: TrackViewModel? = null
     private var trackFragmentBinding: TrackFragmentBinding? = null
 
     companion object {
@@ -51,15 +51,15 @@ class TracksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         networkConnectionInterceptor = NetworkConnectionInterceptor(requireContext())
-        myApi = MyApi(networkConnectionInterceptor)
+        myApi = MyApi(networkConnectionInterceptor!!)
         appDatabase = AppDatabase.getInstance(requireContext())!!
-        genreRepository = GenreRepository(myApi, appDatabase)
-        trackViewModelFactory = TrackViewModelFactory(genreRepository)
-        viewModel = ViewModelProvider(this, trackViewModelFactory)[(TrackViewModel::class.java)]
+        genreRepository = GenreRepository(myApi!!, appDatabase!!)
+        trackViewModelFactory = TrackViewModelFactory(genreRepository!!)
+        viewModel = ViewModelProvider(this, trackViewModelFactory!!)[(TrackViewModel::class.java)]
 
         genreName = arguments?.getString("GENRE_NAME")
 
-        viewModel.getTrackListLiveData().observe(viewLifecycleOwner) { trackList ->
+        viewModel!!.getTrackListLiveData().observe(viewLifecycleOwner) { trackList ->
             if (trackList != null) {
                 trackFragmentBinding!!.recyclerviewTracks.also {
                     it.layoutManager = GridLayoutManager(context, 2)
@@ -68,7 +68,7 @@ class TracksFragment : Fragment() {
             }
         }
 
-        viewModel.getMessageLiveData().observe(viewLifecycleOwner) {
+        viewModel!!.getMessageLiveData().observe(viewLifecycleOwner) {
             requireContext().toast(it)
         }
     }
@@ -76,12 +76,18 @@ class TracksFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (genreName != null) {
-            viewModel.getTracks(genreName!!)
+            viewModel!!.getTracks(genreName!!)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         AppDatabase.destroyInstance()
+        trackFragmentBinding = null
+        viewModel = null
+        trackViewModelFactory = null
+        networkConnectionInterceptor = null
+        genreRepository = null
+        myApi = null
     }
 }

@@ -9,15 +9,26 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
+import com.example.musicwiki.data.db.AppDatabase
 import com.example.musicwiki.data.db.entities.Artist
 import com.example.musicwiki.data.repository.GenreRepository
-import com.example.musicwiki.data.db.AppDatabase
 import com.example.musicwiki.databinding.ArtistFragmentBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.NetworkConnectionInterceptor
 import com.example.musicwiki.utils.toast
 
 class ArtistFragment : Fragment() {
+
+    private var genreName:String? = ""
+
+    private var myApi: MyApi? = null
+    private var appDatabase: AppDatabase? = null
+    private var genreRepository: GenreRepository? = null
+    private var networkConnectionInterceptor: NetworkConnectionInterceptor? = null
+    private var artistViewModelFactory: ArtistViewModelFactory? = null
+    private var artistFragmentBinding: ArtistFragmentBinding? = null
+
+    private var viewModel: ArtistViewModel? = null
 
     companion object {
         fun newInstance(genreName: String) = ArtistFragment().apply {
@@ -26,17 +37,6 @@ class ArtistFragment : Fragment() {
             }
         }
     }
-
-    private var genreName:String? = ""
-    private lateinit var myApi: MyApi
-    private lateinit var appDatabase: AppDatabase
-    private lateinit var genreRepository: GenreRepository
-    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
-    private lateinit var artistViewModelFactory: ArtistViewModelFactory
-
-    private var artistFragmentBinding: ArtistFragmentBinding? = null
-
-    private var viewModel: ArtistViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,11 +51,11 @@ class ArtistFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         networkConnectionInterceptor = NetworkConnectionInterceptor(requireContext())
-        myApi = MyApi(networkConnectionInterceptor)
+        myApi = MyApi(networkConnectionInterceptor!!)
         appDatabase = AppDatabase.getInstance(requireContext())!!
-        genreRepository = GenreRepository(myApi, appDatabase)
-        artistViewModelFactory = ArtistViewModelFactory(genreRepository)
-        viewModel = ViewModelProvider(this, artistViewModelFactory)[(ArtistViewModel::class.java)]
+        genreRepository = GenreRepository(myApi!!, appDatabase!!)
+        artistViewModelFactory = ArtistViewModelFactory(genreRepository!!)
+        viewModel = ViewModelProvider(this, artistViewModelFactory!!)[(ArtistViewModel::class.java)]
 
         genreName = arguments?.getString("GENRE_NAME")
 
@@ -85,5 +85,9 @@ class ArtistFragment : Fragment() {
         viewModel = null
         artistFragmentBinding = null
         AppDatabase.destroyInstance()
+        artistViewModelFactory = null
+        networkConnectionInterceptor = null
+        genreRepository = null
+        myApi = null
     }
 }

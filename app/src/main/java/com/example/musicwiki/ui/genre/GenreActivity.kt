@@ -6,9 +6,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicwiki.R
-import com.example.musicwiki.data.repository.GenreItemsRepository
 import com.example.musicwiki.data.db.AppDatabase
 import com.example.musicwiki.data.db.entities.Genre
+import com.example.musicwiki.data.repository.GenreItemsRepository
 import com.example.musicwiki.databinding.ActivityGenreBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.NetworkConnectionInterceptor
@@ -19,29 +19,30 @@ import com.example.musicwiki.utils.toast
 class GenreActivity : AppCompatActivity() {
 
     private var expanded = false
-    private lateinit var myApi: MyApi
+    private var myApi: MyApi? = null
     private lateinit var appDatabase: AppDatabase
-    private lateinit var genreViewModelFactory: GenreViewModelFactory
-    private lateinit var genreItemsRepository: GenreItemsRepository
-    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
-    private lateinit var genreViewModel: GenreViewModel
+    private var genreViewModelFactory: GenreViewModelFactory? = null
+    private var genreItemsRepository: GenreItemsRepository? = null
+    private var networkConnectionInterceptor: NetworkConnectionInterceptor? = null
+    private var genreViewModel: GenreViewModel? = null
     private var introBinding: ActivityGenreBinding? = null
     private var totalGenresList = ArrayList<Genre>()
     private var topGenresList = ArrayList<Genre>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         introBinding = DataBindingUtil.setContentView(this, R.layout.activity_genre)
 
         networkConnectionInterceptor = NetworkConnectionInterceptor(this)
-        myApi = MyApi(networkConnectionInterceptor)
+        myApi = MyApi(networkConnectionInterceptor!!)
         appDatabase = AppDatabase.getInstance(this)!!
-        genreItemsRepository = GenreItemsRepository(myApi, appDatabase)
-        genreViewModelFactory = GenreViewModelFactory(genreItemsRepository)
-        genreViewModel = ViewModelProvider(this, genreViewModelFactory)[GenreViewModel::class.java]
+        genreItemsRepository = GenreItemsRepository(myApi!!, appDatabase)
+        genreViewModelFactory = GenreViewModelFactory(genreItemsRepository!!)
+        genreViewModel = ViewModelProvider(this, genreViewModelFactory!!)[GenreViewModel::class.java]
 
 
-        genreViewModel.getGenreLiveData().observe(this) {
+        genreViewModel!!.getGenreLiveData().observe(this) {
             if (it != null) {
                 totalGenresList = it as ArrayList<Genre>
                 io {
@@ -62,7 +63,7 @@ class GenreActivity : AppCompatActivity() {
             }
         }
 
-        genreViewModel.getMessageLiveData().observe(this) {
+        genreViewModel!!.getMessageLiveData().observe(this) {
             toast(it)
         }
 
@@ -85,7 +86,7 @@ class GenreActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        genreViewModel.getGenre()
+        genreViewModel!!.getGenre()
         introBinding!!.btnDropDown.setBackgroundResource(R.drawable.ic_expand)
         expanded = false
     }
@@ -100,5 +101,11 @@ class GenreActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         introBinding = null
+        genreViewModel = null
+        genreViewModelFactory = null
+        genreItemsRepository = null
+        AppDatabase.destroyInstance()
+        myApi = null
+        networkConnectionInterceptor = null
     }
 }

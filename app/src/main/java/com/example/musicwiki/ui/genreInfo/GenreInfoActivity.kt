@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.musicwiki.R
-import com.example.musicwiki.data.repository.GenreRepository
 import com.example.musicwiki.data.db.AppDatabase
+import com.example.musicwiki.data.repository.GenreRepository
 import com.example.musicwiki.databinding.ActivityGenreInfoBinding
 import com.example.musicwiki.network.MyApi
 import com.example.musicwiki.network.NetworkConnectionInterceptor
@@ -14,14 +14,15 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class GenreInfoActivity : AppCompatActivity() {
     private var genreName: String? = null
-    private lateinit var myApi : MyApi
-    private lateinit var appDatabase: AppDatabase
-    private lateinit var genreRepository: GenreRepository
-    private lateinit var networkConnectionInterceptor: NetworkConnectionInterceptor
-    private lateinit var genreInfoViewModelFactory: GenreInfoViewModelFactory
-    private lateinit var genreInfoViewModel: GenreInfoViewModel
+    private var myApi : MyApi? = null
+    private var appDatabase: AppDatabase? = null
+    private var genreRepository: GenreRepository? = null
+    private var networkConnectionInterceptor: NetworkConnectionInterceptor? = null
+    private var genreInfoViewModelFactory: GenreInfoViewModelFactory? = null
+    private var genreInfoViewModel: GenreInfoViewModel? = null
     private var viewPagerAdapter: ViewPagerAdapter? = null
     private var genreInfoBinding: ActivityGenreInfoBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         genreInfoBinding = DataBindingUtil.setContentView(this, R.layout.activity_genre_info)
@@ -29,12 +30,12 @@ class GenreInfoActivity : AppCompatActivity() {
         setupActionBarWithBack()
 
         networkConnectionInterceptor = NetworkConnectionInterceptor(this)
-        myApi = MyApi(networkConnectionInterceptor)
+        myApi = MyApi(networkConnectionInterceptor!!)
         appDatabase = AppDatabase.getInstance(this)!!
-        genreRepository = GenreRepository(myApi, appDatabase)
-        genreInfoViewModelFactory = GenreInfoViewModelFactory(genreRepository)
+        genreRepository = GenreRepository(myApi!!, appDatabase!!)
+        genreInfoViewModelFactory = GenreInfoViewModelFactory(genreRepository!!)
         genreInfoViewModel =
-            ViewModelProvider(this, genreInfoViewModelFactory)[GenreInfoViewModel::class.java]
+            ViewModelProvider(this, genreInfoViewModelFactory!!)[GenreInfoViewModel::class.java]
 
         genreName = intent.getStringExtra("GENRE_NAME")
         genreName = genreName?.uppercase()
@@ -43,7 +44,7 @@ class GenreInfoActivity : AppCompatActivity() {
             setupViewPager()
         }
 
-        genreInfoViewModel.getGenreInfoLiveData().observe(this) {
+        genreInfoViewModel!!.getGenreInfoLiveData().observe(this) {
             if (it != null) {
                 val index = it.wiki.summary.indexOf("<a")
                 val summary = it.wiki.summary.substring(0, index)
@@ -82,12 +83,17 @@ class GenreInfoActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (genreName != null) {
-            genreInfoViewModel.getGenreInfo(genreName!!)
+            genreInfoViewModel!!.getGenreInfo(genreName!!)
         }
     }
     override fun onDestroy() {
         super.onDestroy()
         genreInfoBinding = null
         viewPagerAdapter = null
+        genreInfoViewModelFactory = null
+        genreRepository = null
+        AppDatabase.destroyInstance()
+        myApi = null
+        networkConnectionInterceptor = null
     }
 }
