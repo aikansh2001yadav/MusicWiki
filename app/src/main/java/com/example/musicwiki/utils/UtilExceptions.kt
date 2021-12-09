@@ -2,6 +2,9 @@ package com.example.musicwiki.utils
 
 import java.io.IOException
 
+/**
+ * Util Exception classes
+ */
 object UtilExceptions {
     class ApiException(message: String) : IOException(message)
 

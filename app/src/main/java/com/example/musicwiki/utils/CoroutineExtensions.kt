@@ -5,6 +5,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
+/**
+ * Coroutines util functions
+ */
 object CoroutineExtensions {
     fun io(work: suspend () -> Unit) = CoroutineScope(Dispatchers.IO).launch {
         work.invoke()

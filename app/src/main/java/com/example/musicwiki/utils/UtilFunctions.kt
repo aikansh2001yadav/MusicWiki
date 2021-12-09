@@ -8,10 +8,16 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.example.musicwiki.R
 
+/**
+ * Show toast
+ */
 fun Context.toast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
+/**
+ * Shows image using glide
+ */
 @BindingAdapter("image")
 fun image(imageView: View, text: String) {
     if (text.isEmpty()) {
